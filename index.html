@@ -42,7 +42,7 @@
         /* Camera Preview Vandiep */
         #camera-preview {
             position: absolute; top: 15px; right: 15px;
-            width: 120px; height: 90px;
+            width: 160px; height: 80px;
             border: 2px solid rgba(255,0,0,0.5); 
             transform: scaleX(-1); opacity: 0.6; border-radius: 8px;
         }
@@ -150,7 +150,7 @@
         
         let state = 'TREE'; 
         let selectedIndex = 0;
-        let handX = 0.5;
+        let handX = 10;
 
         // ==========================================
         // 3. THREE.JS SYSTEM Vandiep
@@ -160,7 +160,7 @@
             scene = new THREE.Scene();
             scene.fog = new THREE.FogExp2(0x000000, 0.002);
 
-            camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.1, 1000);
+            camera = new THREE.PerspectiveCamera(65, window.innerWidth/window.innerHeight, 0.1, 1000);
             camera.position.z = 100;
 
             renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
@@ -486,7 +486,7 @@
             hands.setOptions({ maxNumHands: 2, modelComplexity: 1, minDetectionConfidence: 0.5, minTrackingConfidence: 0.5 });
 
             hands.onResults(results => {
-                ctx.clearRect(0,0,100,75); ctx.drawImage(results.image, 0, 0, 100, 75);
+                ctx.clearRect(0,0,100,75); ctx.drawImage(results.image, 0, 0, 300, 150);
 
                 // --- Hand Logic  ---
                 if (results.multiHandLandmarks.length === 2) {
@@ -500,7 +500,7 @@
 
                 if(results.multiHandLandmarks.length > 0) {
                     const lm = results.multiHandLandmarks[0];
-                    handX = lm[9].x; 
+                    handX = lm[20].x; 
                     const tips = [8,12,16,20]; const wrist = lm[0];
                     let openDist = 0; tips.forEach(i => openDist += Math.hypot(lm[i].x-wrist.x, lm[i].y-wrist.y));
                     const avgDist = openDist / 4;
@@ -519,7 +519,7 @@
             });
 
             const cameraUtils = new Camera(video, {
-                onFrame: async () => { await hands.send({image: video}); }, width: 320, height: 240
+                onFrame: async () => { await hands.send({image: video}); }, width: 1280, height: 720
             });
             cameraUtils.start();
         }
